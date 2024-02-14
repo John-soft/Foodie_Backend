@@ -17,6 +17,7 @@ const getRandomCategories = asyncHandler(async (req, res) => {
   let categories = await Category.aggregate([
     { $match: { value: { $ne: "more" } } },
     { $sample: { size: 4 } },
+    { $project: { __v: 0 } },
   ]);
 
   const moreCategory = await Category.findOne({ value: "more" }, { __v: 0 });
