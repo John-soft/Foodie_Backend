@@ -21,8 +21,8 @@ let userSchema = new Schema(
       required: true,
     },
     verification: {
-      type: String,
-      required: true,
+      type: Boolean,
+      default: false,
     },
     phone: {
       type: String,

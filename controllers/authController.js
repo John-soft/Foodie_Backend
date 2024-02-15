@@ -49,6 +49,7 @@ const createUser = asyncHandler(async (req, res) => {
     .status(201)
     .json({ status: true, message: "User Successfully Created", newUser });
 });
+
 const login = asyncHandler(async (req, res) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/;
 
