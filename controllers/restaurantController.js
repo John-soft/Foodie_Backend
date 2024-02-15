@@ -13,7 +13,7 @@ const addRestaurant = asyncHandler(async (req, res) => {
     !logoUrl ||
     !coords ||
     !coords.latitude ||
-    !coords.logitude ||
+    !coords.longitude ||
     !coords.address ||
     !coords.title
   ) {
@@ -21,7 +21,11 @@ const addRestaurant = asyncHandler(async (req, res) => {
   }
 
   const newRestaurant = await Restaurant.create(req.body);
-  res.status(200).json(newRestaurant);
+  res.status(200).json({
+    status: true,
+    message: "Restaurant created successfully",
+    newRestaurant,
+  });
 });
 
 const getRestaurantById = asyncHandler(async (req, res) => {
@@ -37,13 +41,13 @@ const getAllNearbyRestaurants = asyncHandler(async (req, res) => {
   const code = req.params.code;
   let allNearByRestaurants = [];
   if (code) {
-    allNearByRestaurants = Restaurant.aggregate([
+    allNearByRestaurants = await Restaurant.aggregate([
       { $match: { code: code, isAvailable: true } },
       { $project: { __v: 0 } },
     ]);
   }
   if (allNearByRestaurants.length == 0) {
-    allNearByRestaurants = Restaurant.aggregate([
+    allNearByRestaurants = await Restaurant.aggregate([
       { $match: { code: code, isAvailable: true } },
       { $project: { __v: 0 } },
     ]);
@@ -57,21 +61,24 @@ const getRandomRestaurants = asyncHandler(async (req, res) => {
   let randomRestaurants = [];
 
   if (code) {
-    randomRestaurants = Restaurant.aggregate([
+    randomRestaurants = await Restaurant.aggregate([
       { $match: { code: code, isAvailable: true } },
       { $sample: { size: 5 } },
       { $project: { __v: 0 } },
     ]);
   }
   if (randomRestaurants.length == 0) {
-    randomRestaurants = Restaurant.aggregate([
+    randomRestaurants = await Restaurant.aggregate([
       { $match: { code: code, isAvailable: true } },
       { $sample: { size: 5 } },
       { $project: { __v: 0 } },
     ]);
   }
 
-  res.status(200).json(randomRestaurants);
+  res.status(200).json({
+    length: randomRestaurants.length,
+    randomRestaurants,
+  });
 });
 
 module.exports = {
