@@ -25,11 +25,21 @@ const verifyAccount = asyncHandler(async (req, res) => {
 
     if (userOtp === user.otp) {
       user.verification = true;
-      user.otp = "none";
+      user.otp = "";
       await user.save();
+      //   res
+      //     .status(200)
+      //     .json({
+      //       message: "OTP verified successfully",
+      //       user: { ...user, otp: "" },
+      //     });
 
-      const { password, __v, otp, createdAt, ...others } = user._doc;
-      return res.status(200).json(...others);
+      const { password, __v, otp, createdAt, updatedAt, ...others } = user._doc;
+      console.log(otp);
+      return res.status(200).json({
+        message: "OTP Verified successfully",
+        ...others,
+      });
     } else {
       return res
         .status(400)

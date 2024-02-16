@@ -4,6 +4,7 @@ const crypto = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const generateOtp = require("../utils/otp_generator");
 const sendEmail = require("../utils/email");
+const { log } = require("console");
 
 const createUser = asyncHandler(async (req, res) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/;
@@ -18,7 +19,6 @@ const createUser = asyncHandler(async (req, res) => {
   console.log(req.body.password);
 
   if (req.body.password.length < minPasswordLength) {
-    console.log(8);
     return res.status(400).json({
       status: false,
       message:
@@ -72,23 +72,23 @@ const login = asyncHandler(async (req, res) => {
     res.status(400).json({ status: false, message: "User not found" });
   }
 
-  if (!user && !(await user.isPasswordCorrect)) {
+  if (user && (await user.isPasswordCorrect(req.body.password))) {
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        userType: user.userType,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "21d" }
+    );
+    const { password, createdAt, updatedAt, __v, otp, ...others } = user._doc;
+    res.status(200).json({ ...others, accessToken });
+  } else {
     return res
       .status(400)
       .json({ status: false, message: "Password incorrect" });
   }
-
-  const accessToken = jwt.sign(
-    {
-      id: user._id,
-      userType: user.userType,
-      email: user.email,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "21d" }
-  );
-  const { password, createdAt, updatedAt, __v, otp, ...others } = user._doc;
-  res.status(200).json({ ...others, accessToken });
 });
 
 module.exports = {
