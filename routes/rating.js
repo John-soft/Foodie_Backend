@@ -4,7 +4,8 @@ const {
   addRating,
   checkUserRating,
 } = require("../controllers/ratingController");
+const { verifyTokenAndAuthorization } = require("../middleware/verifyToken");
 
-router.post("/", addRating);
-router.get("/", checkUserRating);
+router.post("/", verifyTokenAndAuthorization, addRating);
+router.get("/", verifyTokenAndAuthorization, checkUserRating);
 module.exports = router;

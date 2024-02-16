@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("api/v1/auth", authRoute);
-app.use("api/v1/user", usersRoute);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/user", usersRoute);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/restaurant", restaurantRoute);
 app.use("/api/v1/foods", foodRouter);

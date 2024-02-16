@@ -6,9 +6,11 @@ const {
   verifyPhone,
 } = require("../controllers/userController");
 
-router.get("/", getUser);
-router.delete("/", deleteUser);
-router.get("/verify/:otp", verifyAccount);
-router.get("/verify_phone/:phone", verifyPhone);
+const { verifyTokenAndAuthorization } = require("../middleware/verifyToken");
+
+router.get("/", verifyTokenAndAuthorization, getUser);
+router.delete("/", verifyTokenAndAuthorization, deleteUser);
+router.get("/verify/:otp", verifyTokenAndAuthorization, verifyAccount);
+router.get("/verify_phone/:phone", verifyTokenAndAuthorization, verifyPhone);
 
 module.exports = router;

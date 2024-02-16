@@ -6,8 +6,9 @@ const {
   getAllNearbyRestaurants,
   getRandomRestaurants,
 } = require("../controllers/restaurantController");
+const { verifyTokenAndAuthorization } = require("../middleware/verifyToken");
 
-router.post("/", addRestaurant);
+router.post("/", verifyTokenAndAuthorization, addRestaurant);
 router.get("/:id", getRestaurantById);
 router.get("/all/:code", getAllNearbyRestaurants);
 router.get("/random/:code", getRandomRestaurants);
