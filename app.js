@@ -10,6 +10,7 @@ const authRoute = require("./routes/auth");
 const usersRoute = require("./routes/user");
 const addressRoute = require("./routes/address");
 const cartRoute = require("./routes/cart");
+const orderRoute = require("./routes/order");
 const { globalErrorHandler, notFound } = require("././middleware/errorHandler");
 app.use(express.json());
 app.use(morgan("dev"));
@@ -23,6 +24,7 @@ app.use("/api/v1/foods", foodRouter);
 app.use("/api/v1/rating", ratingRoute);
 app.use("/api/v1/address", addressRoute);
 app.use("/api/v1/cart", cartRoute);
+app.use("/api/v1/order", orderRoute);
 
 app.use(notFound);
 app.use(globalErrorHandler);
