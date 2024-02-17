@@ -3,7 +3,7 @@ const User = require("../models/User");
 const Address = require("../models/Address");
 
 const createAddress = asyncHandler(async (req, res) => {
-  const newAddress = await Address.create({
+  const newAddress = await Address({
     userId: req.user.id,
     addressLine1: req.body.addressLine1,
     postalCode: req.body.postalCode,
@@ -15,6 +15,12 @@ const createAddress = asyncHandler(async (req, res) => {
   if (req.body.default === true) {
     await Address.updateMany({ userId: req.user.id }, { default: false });
   }
+  /* 
+  To save user to the database and make updates first create the model data 
+  and use the save() method on it do not use the create() method
+  on the model data directly
+  */
+  await newAddress.save();
   res
     .status(201)
     .json({ status: true, message: "Address added successfully", newAddress });
