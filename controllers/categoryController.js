@@ -5,31 +5,35 @@ const createCategory = asyncHandler(async (req, res) => {
   const newCategory = await Category.create(req.body);
   res.json(newCategory);
 });
-const viewCategories = asyncHandler(async (req, res) => {});
+
 const getAllCategories = asyncHandler(async (req, res) => {
   const categories = await Category.find(
     { title: { $ne: "More" } },
     { __v: 0 }
   );
-  res.json(categories);
+  res.status(200).json(categories);
 });
-const getRandomCategories = asyncHandler(async (req, res) => {
-  let categories = await Category.aggregate([
-    { $match: { value: { $ne: "more" } } },
-    { $sample: { size: 4 } },
-    { $project: { __v: 0 } },
-  ]);
 
-  const moreCategory = await Category.findOne({ value: "more" }, { __v: 0 });
-  if (moreCategory) {
-    categories.push(moreCategory);
+const getRandomCategories = asyncHandler(async (req, res) => {
+  try {
+    let categories = await Category.aggregate([
+      { $match: { value: { $ne: "more" } } },
+      { $sample: { size: 4 } },
+      { $project: { __v: 0 } },
+    ]);
+
+    const moreCategory = await Category.findOne({ value: "more" });
+    if (moreCategory) {
+      categories.push(moreCategory);
+    }
+    res.status(200).json(categories);
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
   }
-  res.json(categories);
 });
 
 module.exports = {
   createCategory,
-  viewCategories,
   getAllCategories,
   getRandomCategories,
 };
