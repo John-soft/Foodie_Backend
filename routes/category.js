@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const {
   createCategory,
-  viewCategories,
   getAllCategories,
   getRandomCategories,
 } = require("../controllers/categoryController");

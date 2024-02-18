@@ -26,6 +26,10 @@ var restaurantSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  imageUrl: {
+    type: String,
+    required: true,
+  },
   owner: {
     type: String,
     required: true,

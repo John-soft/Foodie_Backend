@@ -75,10 +75,7 @@ const getRandomRestaurants = asyncHandler(async (req, res) => {
     ]);
   }
 
-  res.status(200).json({
-    length: randomRestaurants.length,
-    randomRestaurants,
-  });
+  res.status(200).json(randomRestaurants);
 });
 
 module.exports = {
