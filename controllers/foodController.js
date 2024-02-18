@@ -53,18 +53,17 @@ const getFoodById = asyncHandler(async (req, res) => {
 
 const getRandomFood = asyncHandler(async (req, res) => {
   let foods = [];
-
   if (req.params.code) {
     foods = await Food.aggregate([
       { $match: { code: req.params.code, isAvailable: true } },
-      { $sample: { size: 5 } },
+      { $sample: { size: 3 } },
       { $project: { __v: 0 } },
     ]);
   }
 
   if (!foods.length) {
     foods = await Food.aggregate([
-      { $sample: { size: 5 } },
+      { $sample: { size: 3 } },
       { $project: { __v: 0 } },
     ]);
   }
@@ -76,6 +75,16 @@ const getRandomFood = asyncHandler(async (req, res) => {
     length: foods.length,
     foods,
   });
+});
+
+const getAllFoodsByCode = asyncHandler(async (req, res) => {
+  try {
+    const code = req.params.code;
+    const foods = await Food.find({ code: code });
+    res.status(200).json(foods);
+  } catch (error) {
+    res.status(500).json({ status: false, message: error.message });
+  }
 });
 
 const getFoodsByRestaurant = asyncHandler(async (req, res) => {
@@ -139,6 +148,7 @@ module.exports = {
   addFood,
   getFoodById,
   getRandomFood,
+  getAllFoodsByCode,
   getFoodsByRestaurant,
   getFoodsByCategoryAndCode,
   searchFood,
