@@ -94,7 +94,7 @@ const getFoodsByRestaurant = asyncHandler(async (req, res) => {
 });
 
 const getFoodsByCategoryAndCode = asyncHandler(async (req, res) => {
-  const { category, code } = req.body;
+  const { category, code } = req.params;
   const foods = await Food.aggregate([
     { $match: { category: category, code: code, isAvailable: true } },
     { $project: { __v: 0 } },
@@ -120,7 +120,7 @@ const searchFood = asyncHandler(async (req, res) => {
 });
 
 const getRandomFoodsByCategoryAndCode = asyncHandler(async (req, res) => {
-  const { category, code } = req.body;
+  const { category, code } = req.params;
 
   let foods = [];
 
