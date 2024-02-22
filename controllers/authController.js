@@ -4,7 +4,6 @@ const crypto = require("crypto-js");
 const jwt = require("jsonwebtoken");
 const generateOtp = require("../utils/otp_generator");
 const sendEmail = require("../utils/email");
-const { log } = require("console");
 
 const createUser = asyncHandler(async (req, res) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$/;
